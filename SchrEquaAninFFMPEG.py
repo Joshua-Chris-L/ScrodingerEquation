@@ -296,4 +296,4 @@ anim = animation.FuncAnimation(fig, animate, init_func=init,
 
 #anim.save('schrodinger_barrier.mp4', fps=15, extra_args=['-vcodec', 'libx264'])
 
-pl.show()
+plt.show()
