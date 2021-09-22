@@ -1,0 +1,45 @@
+
+Source code to generate plots of the Quantum Harmonic Oscillator wavefunction. 
+Here's a brief description of what that is: http://ket.space/index.php/2016/05/17/quantum-harmonic-oscillator/
+
+
+from __future__ import division
+from numpy.polynomial.hermite import *
+import numpy
+import pylab
+import math
+# use natural units where c = h_bar = 1
+m = 1
+w = 1
+h_bar = 1
+n = 1
+
+# some realistic values in SI units might be:
+# mass of the electron m = 9.11e-31 kg
+# Planck's constant h_bar = 1.05e-34 J s
+# natural frequency of the oscillator w = 4.57e14 Hz
+# more info on QHO here: https://en.wikipedia.org/wiki/Quantum_harmonic_oscillator
+
+pi = math.pi
+x_min = -20
+x_max = -x_min
+xs = numpy.linspace(x_min,x_max,10000)
+psi = []
+# coefficients for Hermite series, all 0s except the n-th term
+herm_coeff = []
+for i in range(n):
+    herm_coeff.append(0)
+herm_coeff.append(1)
+
+for x in xs:
+    psi.append(math.exp(-m*w*x**2/(2*h_bar)) * hermval((m*w/h_bar)**0.5 * x, herm_coeff))
+# normalization factor for the wavefunction:
+psi = numpy.multiply(psi, 1 / (math.pow(2, n) * math.factorial(n))**0.5 * (m*w/(pi*h_bar))**0.25)
+
+pylab.plot(xs, psi)
+pylab.xlim(xmax=x_max, xmin=x_min)
+pylab.xlabel("$x$", size=18)
+pylab.ylabel("$\psi_{" + str(n) + "}(x)$", size=18)
+pylab.title("Quantum Harmonic Oscillator Wavefunction ($n = " + str(n) + "$)", size=14)
+pylab.savefig("QHOn=" + str(n) + ".png",bbox_inches="tight",dpi=600)
+pylab.show()
